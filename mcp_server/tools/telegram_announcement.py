@@ -2,6 +2,7 @@ import os
 import logging
 from openai import OpenAI
 from dotenv import load_dotenv
+
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -62,7 +63,7 @@ def load_previous_response(client):
 def gen_telegram_announcement_tool(user_prompt):
     client = OpenAI(api_key=OPENAI_API_KEY)
 
-    telegram_text_prompt = f"""
+    telegram_text_prompt = """
     You are a professional copywriter for official Telegram posts by MINDEF/SAF.
 
     Write a short, energetic announcement post in this format:
@@ -80,23 +81,18 @@ def gen_telegram_announcement_tool(user_prompt):
     - Use Telegram Markdown formatting (e.g. *bold*, _italic_) where appropriate.
     - Output only the message (no quotes, no JSON)
 
-    Use the following information to guide your design, but not all needs to be included if they are repeated, irrelevant or redundant:
+    Use the following information to guide your design, but not all needs to be included if they are repeated or redundant:
     Extract Product Name, Product Description, and Unique Selling Point from the user prompt.
     """
 
     previous_response = load_previous_response(client)
 
     if previous_response:
-        # Follow-up: ask user for changes, use previous_response. If not, it improves the infographics by itself.
-        user_prompt = input(
-            "What changes would you like to make to this announcement?\n"
-            "↵ Press Enter to auto-improve: "
-        ).strip()
-        if user_prompt:
-            prompt_to_use = user_prompt
-        else:
-            prompt_to_use = "Improve the telegram announcement as appropriate."
+        prompt_to_use = (
+            user_prompt.strip() or "Improve the announcement as appropriate."
+        )
     else:
+        # first run: the full briefing
         prompt_to_use = telegram_text_prompt
 
     # Generate infographic

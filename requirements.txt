@@ -5,3 +5,5 @@ google-genai
 llm
 fastapi
 langchain_tavily
+langchain-community
+langchain_openai
