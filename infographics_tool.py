@@ -144,8 +144,8 @@ if __name__ == "__main__":
 
         Create a {RECOMMENDED_STYLE} infographics image for the internal launch of a digital tool.
 
-        Include all images provided in the appropriate positions. If the image is a logo, it should be display it prominently at the top.
-        If a QR code image is provided, include it at the bottom of the infographic with a tag e.g. "Find out more here".
+        Include images provided in the appropriate positions. If the image is a logo, it should be display it prominently at the top.
+        If a QR code image is provided, only include an empty placeholder square where you intend to place it, at bottom of the infographic. Do not include the QR code image. There could be an action tag outside the box e.g. "Find out more here". 
 
         Use the following information to guide your design, but not all needs to be included if they are repeated, irrelevant or redundant:
 
