@@ -8,6 +8,8 @@ from app.get_tools import get_tools
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import ToolMessage
 from prompt.gen_prompt import system_prompt
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # Define our tool node
@@ -70,7 +72,6 @@ async def chatbot_pipeline():
         },
     )
     graph_builder.add_edge("tools", "llm")
-    graph_builder.add_edge("llm", END)
 
     graph = graph_builder.compile()
     return graph
