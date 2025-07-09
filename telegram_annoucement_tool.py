@@ -90,11 +90,14 @@ if __name__ == "__main__":
 
     if previous_response:
         # Follow-up: ask user for changes, use previous_response. If not, it improves the infographics by itself.
-        user_prompt = input("Any tweaks to the previous Telegram post?").strip()
+        user_prompt = input(
+            "What changes would you like to make to this announcement?\n"
+            "↵ Press Enter to auto-improve: "
+        ).strip()
         if user_prompt:
             prompt_to_use = user_prompt
         else:
-            prompt_to_use = "Please improve the telegram announcement as appropriate."
+            prompt_to_use = "Improve the telegram announcement as appropriate."
     else:
         prompt_to_use = telegram_text_prompt
 
