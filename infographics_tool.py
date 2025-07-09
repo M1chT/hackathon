@@ -111,14 +111,14 @@ if __name__ == "__main__":
     previous_response = load_previous_response(client)
 
     if previous_response:
-        # Follow-up: ask user for changes, use previous_response. If not, it updates the infographics simply.
+        # Follow-up: ask user for changes, use previous_response. If not, it improves the infographics by itself.
         user_prompt = input(
             "What changes would you like to make to this infographics? You can include new images too."
         ).strip()
         if user_prompt:
             prompt_to_use = user_prompt
         else:
-            prompt_to_use = "Please update the infographic as appropriate."
+            prompt_to_use = "Please improve the infographic as appropriate."
     else:
         # First run: generate tagline and full prompt
         tagline_prompt = f"""
