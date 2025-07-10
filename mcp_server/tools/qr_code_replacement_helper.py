@@ -49,15 +49,30 @@ def detect_placeholder_box_from_b64(image_b64: str) -> tuple[int, int, int, int]
 
 
 def replace_qr_in_placeholder_from_b64(
-    placeholder_b64: str, qr_path: str = "qr_placeholder/product_link.png"
+    placeholder_b64: str
 ) -> str:
     """
-    Given Base64 of placeholder image and a filepath to QR image:
-    1) Detect placeholder box from Base64 input.
-    2) Decode placeholder to PIL Image.
-    3) Load QR image from file path, resize to placeholder size.
-    4) Paste QR over placeholder, then return final image as Base64 PNG.
+    Given Base64 of placeholder image:
+    1) Check if QR image exists in qr_placeholder folder
+    2) Detect placeholder box from Base64 input.
+    3) Decode placeholder to PIL Image.
+    4) Load QR image from qr_placeholder folder, resize to placeholder size.
+    5) Paste QR over placeholder, then return final image as Base64 PNG.
     """
+    import os
+    import glob
+    
+    # Check if there are any images in qr_placeholder folder
+    qr_placeholder_folder = "mcp_server/tools/qr_placeholder"
+    qr_images = glob.glob(f"{qr_placeholder_folder}/*.[pj][pn]g")
+    
+    if not qr_images:
+        raise RuntimeError("No QR code images found in qr_placeholder folder")
+    
+    # Use the first QR image found
+    qr_path = qr_images[0]
+    print(f"Using QR image: {qr_path}")
+    
     print("Replacing QR in placeholder...")
 
     # Decode placeholder and detect coords
@@ -68,8 +83,7 @@ def replace_qr_in_placeholder_from_b64(
     base = PILImage.open(io.BytesIO(ph_data)).convert("RGBA")
 
     # Load QR from file path
-    upload_folder = f"mcp_server/tools/{qr_path}"
-    qr = PILImage.open(upload_folder).convert("RGBA")
+    qr = PILImage.open(qr_path).convert("RGBA")
     qr_resized = qr.resize((w, h), PILImage.LANCZOS)
 
     # Paste QR and encode

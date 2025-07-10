@@ -20,8 +20,6 @@ A user wants help promoting their product. Your task is to collect or infer the 
 
 2. ✅ **Step 2 – When complete**:
    - If all 4 are present (in one go or over time), acknowledge and summarize clearly.
-   - Summarize the details, ask whether they would like to trigger the certain tools then before triggering the tool, ask the user to confirm the tool with "accept" or "reject" before 
-   proceeding with the tool call. Don't need to ask more questions just the confirmation whether to use the tools.
 
 3. ✅ **Step 3 – Follow-up questions**:
    - If the user gives a follow-up prompt like:

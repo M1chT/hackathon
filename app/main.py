@@ -20,6 +20,7 @@ async def send_query(input_query: State):
     while True:
 
         results = await graph.ainvoke(state, config)
+        print(results.keys())
         messages = results.get("messages", [])
 
         # Print new messages only (including those leading up to interrupt)
@@ -28,10 +29,9 @@ async def send_query(input_query: State):
             msg.pretty_print()
         printed_count = len(messages)
         
-        # if state['messages'].contains("accept") or state['messages'].contains("reject"):
-        #     type = state['messages']
+        # with open("test.json", "w") as f:
+        #     f.write(str(messages))
             
-
 
         if "__interrupt__" in results:
             # Handle interrupt, keep printed_count so we don't reprint messages post-resume

@@ -9,6 +9,7 @@ from PIL import Image as PILImage
 
 
 from .qr_code_replacement_helper import replace_qr_in_placeholder_from_b64
+from .qr_detection_tool import qr_detection_and_copy_tool
 
 
 logging.basicConfig(
@@ -82,7 +83,10 @@ def generate_infographic(prompt, client, folder="uploaded", previous_response=No
 
     image_base64 = image_data[0]
 
-    image_base64 = replace_qr_in_placeholder_from_b64(image_base64)
+    try:
+        image_base64 = replace_qr_in_placeholder_from_b64(image_base64)
+    except:
+        pass
 
     with open("infographic.png", "wb") as f:
         f.write(base64.b64decode(image_base64))
@@ -109,6 +113,10 @@ def load_previous_response(client):
 
 def generate_infographics_tool(user_prompt):
     client = OpenAI(api_key=OPENAI_API_KEY)
+
+    # Detect and copy QR codes from uploaded images
+    qr_detection_result = qr_detection_and_copy_tool()
+    print(f"QR Detection: {qr_detection_result}")
 
     previous_response = load_previous_response(client)
 
@@ -156,4 +164,4 @@ def generate_infographics_tool(user_prompt):
             print("Could not display image:", e)
     else:
         print("No infographic generated.")
-    return generate_infographic
+    return generated_infographics

@@ -112,15 +112,15 @@ if "last_response" not in st.session_state:
 for convo in st.session_state.convo_history:
     with st.chat_message(convo["role"]):
         st.markdown(convo["content"])
-        if convo['image']:
-            images = base64_to_image(convo["image"])
-            if len(images) == 1:
-                st.image(images[0], caption="Generated Image", use_container_width=True)
-            else:
-                for i in range(0, len(images), 2):
-                    cols = st.columns(2)
-                    for j, each_img in enumerate(images[i:i+2]):
-                        cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)
+        # if convo['image']:
+        #     images = base64_to_image(convo["image"])
+        #     if len(images) == 1:
+        #         st.image(images[0], caption="Generated Image", use_container_width=True)
+        #     else:
+        #         for i in range(0, len(images), 2):
+        #             cols = st.columns(2)
+        #             for j, each_img in enumerate(images[i:i+2]):
+        #                 cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)
 
 
 # Main user input
@@ -137,10 +137,10 @@ if user_input := st.chat_input(
     response = on_chat_submit(user_input)
     st.session_state.last_response = response
 
-    if response.get('trigger', False):
-        st.session_state.awaiting_user = True
-    else:
-        st.session_state.awaiting_user = False
+    # if response.get('trigger', False):
+    #     st.session_state.awaiting_user = True
+    # else:
+    #     st.session_state.awaiting_user = False
 
 # Tool trigger loop (one input per rerun)
 if st.session_state.awaiting_user:
@@ -164,15 +164,17 @@ if st.session_state.awaiting_user:
 if st.session_state.last_response and not st.session_state.awaiting_user:
     response = st.session_state.last_response
     with st.chat_message("assistant"):
-        st.markdown(response["messages"][1]["content"])
-        if response['base64']:
-            images = base64_to_image(response["base64"])
-            if len(images) == 1:
-                st.image(images[0], caption="Generated Image", use_container_width=True)
-            else:
-                for i in range(0, len(images), 2):
-                    cols = st.columns(2)
-                    for j, each_img in enumerate(images[i:i+2]):
-                        cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)
-    st.session_state.convo_history.append({"role": "assistant", "content": response['text'], "image": response["base64"]})
+        # st.markdown(response["messages"][1]["content"])
+        st.markdown(response['content'])
+        # if response['base64']:
+        #     images = base64_to_image(response["base64"])
+        #     if len(images) == 1:
+        #         st.image(images[0], caption="Generated Image", use_container_width=True)
+        #     else:
+        #         for i in range(0, len(images), 2):
+        #             cols = st.columns(2)
+        #             for j, each_img in enumerate(images[i:i+2]):
+        #                 cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)
+        # "image": response["base64"]}
+    st.session_state.convo_history.append({"role": "assistant", "content": response['content']})
     st.session_state.last_response = None  # Reset after displaying

@@ -5,7 +5,6 @@ from mcp_server.tools.telegram_announcement import gen_telegram_announcement_too
 import logging
 from langchain_tavily import TavilySearch
 from dotenv import load_dotenv
-
 load_dotenv()
 
 logging.basicConfig(
