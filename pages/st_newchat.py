@@ -1,8 +1,6 @@
 import streamlit as st
 
-st.title("Discover Your Marketing Strategy")
-
-# Initialize chat history
+# Initialize chat history in session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -17,13 +15,42 @@ if prompt := st.chat_input(
     accept_file=True,
     file_type=["jpg", "jpeg", "png"],
 ):
-    # Show user input
-    st.chat_message("user").markdown(prompt)
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    user_input = prompt.text.strip()
 
-    # Simulate bot response
-    response = f"Echo: {prompt}"
-    with st.chat_message("assistant"):
-        st.markdown(response)
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    # Show user input in the chat
+    st.chat_message("user").markdown(user_input)
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    # Check if user input is "2 columns"
+    if user_input == "2 columns":
+        # Simulate bot response with two columns
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.header("cat")
+            # Append the columns as part of the message chain
+            st.session_state.messages.append({"role": "assistant", "content": "cat"})
+                    # Now append the Echo response under the columns
+            response = f"Echo: {user_input}"
+            with st.chat_message("assistant"):
+                st.markdown(response)
+
+        with col2:
+            st.header("dog")
+            # Append the columns as part of the message chain
+            st.session_state.messages.append({"role": "assistant", "content": "dog"})
+            # Now append the Echo response under the columns
+            response = f"Echo: {user_input}"
+            with st.chat_message("assistant"):
+                st.markdown(response)
+
+
+    else:
+        # If not "2 columns", just echo the input in the message chain
+        response = f"Echo: {user_input}"
+        with st.chat_message("assistant"):
+            st.markdown(response)
+
+        # Append the echo response to the message chain
+        st.session_state.messages.append({"role": "assistant", "content": response})
 
