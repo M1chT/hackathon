@@ -5,7 +5,7 @@ from app.utils import add_human_in_the_loop
 async def get_tools():
     client = MultiServerMCPClient(
         {
-            "math": {
+            "server": {
                 "transport": "streamable_http",
                 "url": "http://localhost:3000/mcp/",
             },

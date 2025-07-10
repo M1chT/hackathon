@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 from PIL import Image as PILImage
 
 
+from .qr_code_replacement_helper import replace_qr_in_placeholder_from_b64
+
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
 )
@@ -78,6 +81,9 @@ def generate_infographic(prompt, client, folder="uploaded", previous_response=No
         return response, None
 
     image_base64 = image_data[0]
+
+    image_base64 = replace_qr_in_placeholder_from_b64(image_base64)
+
     with open("infographic.png", "wb") as f:
         f.write(base64.b64decode(image_base64))
 
