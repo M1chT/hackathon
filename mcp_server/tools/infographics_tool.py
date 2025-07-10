@@ -144,14 +144,9 @@ def generate_infographics_tool(user_prompt: str):
 
         Do not include the words 'Product Name', 'Product Description', 'Unique Selling Point', or 'Tagline' in the design.
         """
+    print(user_prompt)
+    prompt_to_use = user_prompt.strip()
 
-
-    if previous_response:
-        prompt_to_use = user_prompt.strip() or "Improve the infographic as appropriate."
-        # prompt_to_use = user_prompt['messages']
-    else:
-        # first run: the full briefing
-        prompt_to_use = infographic_prompt
     logger.info(f"infographic_prompt: {infographic_prompt}")
     logger.info(f"prompt_to_use: {user_prompt.strip()}")
     # prompt_to_use = """Product name: NAVI
@@ -169,7 +164,7 @@ def generate_infographics_tool(user_prompt: str):
         folder="uploaded",
         previous_response=previous_response,
     )
-    logger.info(f"generated_infographics: {generated_infographics}")
+    # logger.info(f"generated_infographics: {generated_infographics}")
     # logger.info(response.output_text)
     # Save response ID for future follow-up
     # TODO: prev_response FOLDER NEEDS TO BE CLEARED FOR NEW SESSION
@@ -185,4 +180,4 @@ def generate_infographics_tool(user_prompt: str):
             logger.info("Could not display image:", e)
     else:
         logger.info("No infographic generated.")
-    return {'img_b64': generated_infographics}
+    return "Infographic generated successfully!"

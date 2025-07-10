@@ -26,6 +26,7 @@ async def vectordb_search(query: str):
     Returns:
         dict: A dictionary containing the top search results, including titles, links, and snippets.
     """
+    logger.info("Retrieving Best Practices...")
     retreival = search_best_practices_tool()
     results = await retreival.ainvoke(query)
     return results
@@ -47,6 +48,21 @@ async def search_web(query: str, num_results: int = 3) -> dict:
     search_tool = TavilySearch(max_results=num_results)
     results = await search_tool.ainvoke(query)
     return results
+
+
+@mcp.tool()
+def infographics_tool(query: str):
+    """
+    Generate an infographic for the internal launch of a digital tool.
+
+    Args:
+        query (str): The user query containing product name, description, unique selling point, recommended style, and tagline.
+
+    Returns:
+        dict: A dictionary containing the generated infographic details.
+    """
+    response = generate_infographics_tool(query)
+    return response
 
 
 @mcp.tool()
