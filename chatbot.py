@@ -1,0 +1,93 @@
+## backend codes
+import io
+import base64
+from PIL import Image
+
+# convert image to base64
+def image_to_base64(uploaded_files):
+    # uploaded_files is a list of UploadedFile objects from Streamlit
+    base64_list = []
+    for uploaded_file in uploaded_files:
+        image = Image.open(uploaded_file)
+        buffered = io.BytesIO()
+        image.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        base64_list.append(img_str)
+    return base64_list
+
+# Simple rule-based chatbot logic
+def chatbot_response(user_input):
+    """
+    Parameter:
+        user_input: {
+        'text': user query in text format,
+        'img': user's uploaded img}
+
+    Output:
+        response: {
+        'text': text response, 
+        'base64': img in base64}
+    """
+  #  print(f"[DEBUG] chatbot_response called with user_input: {user_input}")
+    query = user_input['text'].lower()
+    response = {"trigger": False, "text": "", "base64": None}
+
+    if "hello" in query or "hi" in query:
+        response['text'] = "Hello! How can I help you today?"
+        response['base64'] = None
+     #   print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "how are you" in query:
+        response['text'] = "I'm just a bot, but I'm doing great! Thanks for asking. I'm just a bot, but I'm doing great! Thanks for asking. I'm just a bot, but I'm doing great! Thanks for asking. I'm just a bot, but I'm doing great! Thanks for asking. I'm just a bot, but I'm doing great! Thanks for asking. I'm just a bot, but I'm doing great! Thanks for asking. I'm just a bot, but I'm doing great! Thanks for asking."
+        response['base64'] = None
+      #  print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "bye" in query:
+        response['text'] = "Goodbye! Have a great day."
+        response['base64'] = None
+      #  print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "trigger" in query:
+        response['text'] = None
+        response['base64'] = None
+        response['trigger'] = True
+      #  print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "accept" in query:
+        response['text'] = "tool triggered"
+        response['base64'] = None
+        response['trigger'] = False
+      #  print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "rewrite" in query:
+        response['text'] = "ok got your rewritten stuff"
+        response['base64'] = None
+        response['trigger'] = False
+      #  print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "reject" in query:
+        response['text'] = "ok you asked me not to execute"
+        response['base64'] = None
+        response['trigger'] = False
+       # print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "more images" in query:
+        response['text'] = "I hope the generated image fits your needs"
+        response['base64'] = image_to_base64(["./images/31941-Christmas-New-Year-snow-winter-snowman-4K.jpg", "./images/790317-snowman-snow-xmas-christmas-figure-cinnamon-4K.jpg"])
+        # print(f"[DEBUG] chatbot_response returning: {response['base64']}")
+        return response
+    elif "three options" in query:
+        response['text'] = "I hope the generated image fits your needs"
+        response['base64'] = image_to_base64(["./images/31941-Christmas-New-Year-snow-winter-snowman-4K.jpg", "./images/790317-snowman-snow-xmas-christmas-figure-cinnamon-4K.jpg", "./images/snow_covered_road_and_trees_in_winter_4k_hd_nature-1920x1080.jpg"])
+      #  print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    elif "generate" in query:
+        response['text'] = "I hope the generated image fits your needs"
+        response['base64'] = image_to_base64(["./images/31941-Christmas-New-Year-snow-winter-snowman-4K.jpg"])
+       # print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
+    else:
+        response['text'] = "I'm not sure how to respond to that. Can you rephrase?"
+        response['base64'] = None
+      #  print(f"[DEBUG] chatbot_response returning: {response}")
+        return response
