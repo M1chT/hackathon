@@ -8,9 +8,12 @@ from app.get_tools import get_tools
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import ToolMessage
 from prompt.gen_prompt import system_prompt
+from langgraph.checkpoint.memory import MemorySaver
+
 from dotenv import load_dotenv
 load_dotenv()
 
+memory = MemorySaver()
 
 # Define our tool node
 async def call_tool(state: State):
@@ -73,5 +76,5 @@ async def chatbot_pipeline():
     )
     graph_builder.add_edge("tools", "llm")
 
-    graph = graph_builder.compile()
+    graph = graph_builder.compile(checkpointer=memory)
     return graph

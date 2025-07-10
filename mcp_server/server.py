@@ -5,6 +5,7 @@ from mcp_server.tools.telegram_announcement import gen_telegram_announcement_too
 import logging
 from langchain_tavily import TavilySearch
 from dotenv import load_dotenv
+
 load_dotenv()
 
 logging.basicConfig(
@@ -30,6 +31,7 @@ async def vectordb_search(query: str):
     results = await retreival.ainvoke(query)
     return results
 
+
 @mcp.tool()
 async def search_web(query: str, num_results: int = 3) -> dict:
     """
@@ -47,6 +49,7 @@ async def search_web(query: str, num_results: int = 3) -> dict:
     results = await search_tool.ainvoke(query)
     return results
 
+
 @mcp.tool()
 def infographics_tool(query: str):
     """
@@ -61,6 +64,7 @@ def infographics_tool(query: str):
     response = generate_infographics_tool(query)
     return response
 
+
 @mcp.tool()
 def telegram_announcement_tool(query: str):
     """Generate a Telegram announcement for a product or event.
@@ -73,5 +77,6 @@ def telegram_announcement_tool(query: str):
     """
     response = gen_telegram_announcement_tool(query)
     return response
+
 
 mcp.run(transport="streamable-http")
