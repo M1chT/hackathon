@@ -60,6 +60,7 @@ def infographic_generation(state: State):
         dict: A dictionary containing the generated infographic details.
     """
     response = generate_infographics_tool(state['messages'][-1].content)
+    print(response)
     return response
 
 # Define the conditional edge that determines whether to continue or not

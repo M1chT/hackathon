@@ -153,15 +153,16 @@ for convo in st.session_state.convo_history:
                             copied_label="copied!",
                             icon="st",
                         )
-        if convo['image'] and convo["role"] == "assistant":
-            images = base64_to_image(convo["image"])
-            if len(images) == 1:
-                st.image(images[0], caption="Generated Image", use_container_width=True)
-            else:
-                for i in range(0, len(images), 2):
-                    cols = st.columns(2)
-                    for j, each_img in enumerate(images[i:i+2]):
-                        cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)
+        # with st.expander("Generated Image"):
+            # if convo['image'] and convo["role"] == "assistant":
+            #     images = base64_to_image(convo["image"])
+            #     if len(images) == 1:
+            #         st.image(images[0], use_container_width=True)
+            #     else:
+            #         for i in range(0, len(images), 2):
+            #             cols = st.columns(2)
+            #             for j, each_img in enumerate(images[i:i+2]):
+            #                 cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)
 
 # Main user input
 if user_input := st.chat_input(
@@ -193,10 +194,10 @@ if user_input := st.chat_input(
         # Show success message for all uploaded files
         if uploaded_files:
             if len(uploaded_files) == 1:
-                st.success(f"File '{uploaded_files[0]}' uploaded successfully to uploaded folder!")
+                st.success(f"File '{uploaded_files[0]}' uploaded successfully!")
             else:
                 files_list = ", ".join([f"'{name}'" for name in uploaded_files])
-                st.success(f"Files {files_list} uploaded successfully to uploaded folder!")
+                st.success(f"Files {files_list} uploaded successfully!")
     else:
         display_text = user_input["text"]
     
@@ -212,7 +213,7 @@ if user_input := st.chat_input(
         placeholder.markdown(spinner_html, unsafe_allow_html=True)
     
     # with st.spinner("Generating response..."):
-        response = chatbot_response(user_input)
+        response = on_chat_submit(user_input)
 
         st.session_state.last_response = response
 
@@ -232,7 +233,7 @@ if st.session_state.awaiting_user:
         with st.chat_message("user"):
             st.markdown(second_input)
             # get the response
-            response = chatbot_response({'text': second_input, 'img': None})
+            response = on_chat_submit({'text': second_input, 'img': None})
             st.session_state.last_response = response
             if response and response.get('trigger', False):
                 st.session_state.awaiting_user = True
@@ -242,33 +243,33 @@ if st.session_state.awaiting_user:
 # Display the last response if available and not awaiting further input
 if st.session_state.last_response and not st.session_state.awaiting_user:
     response = st.session_state.last_response
-    if response['text'] and 'placeholder' in locals():
+    if response['content'] and 'placeholder' in locals():
         col1, col2 = st.columns([10, 1], gap="small")
         with col1:
-            placeholder.markdown(response['text'])
+            placeholder.markdown(response['content'])
         with col2:
-            copy_button(response['text'],
+            copy_button(response['content'],
                     tooltip="copy",
                     copied_label="copied!",
                     icon="st",
                 )
-        if response['img_b64']:
-            images = base64_to_image(response["img_b64"])
-            if len(images) == 1:
-                st.image(images[0], caption="Generated Image", use_container_width=True)
-            else:
-                # user_option = st.selectbox('Which image do you want to keep?', ["keep all"] +[f'Image {i+1}' for i in range(len(images))], key="image_selectbox")
-                for i in range(0, len(images), 2):
-                    cols = st.columns(2)
-                    for j, each_img in enumerate(images[i:i+2]):
-                        cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)      
-    elif response['text'] and 'placeholder' not in locals():
+        # if response['img_b64']:
+        #     images = base64_to_image(response["img_b64"])
+        #     if len(images) == 1:
+        #         st.image(images[0], caption="Generated Image", use_container_width=True)
+        #     else:
+        #         # user_option = st.selectbox('Which image do you want to keep?', ["keep all"] +[f'Image {i+1}' for i in range(len(images))], key="image_selectbox")
+        #         for i in range(0, len(images), 2):
+        #             cols = st.columns(2)
+        #             for j, each_img in enumerate(images[i:i+2]):
+        #                 cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)      
+    elif response['content'] and 'placeholder' not in locals():
         with st.chat_message("assistant"):
             col1, col2 = st.columns([10, 1], gap="small")
             with col1:
-                st.markdown(response['text'])
+                st.markdown(response['content'])
             with col2:
-                copy_button(response['text'],
+                copy_button(response['content'],
                         tooltip="copy",
                         copied_label="copied!",
                         icon="st",
@@ -284,6 +285,7 @@ if st.session_state.last_response and not st.session_state.awaiting_user:
                         for j, each_img in enumerate(images[i:i+2]):
                             cols[j].image(each_img, caption=f"Generated Image {i + j + 1}", use_container_width=True)
 
-    st.session_state.convo_history.append({"role": "assistant", "content": response['text'], "image": response["img_b64"]})
+    st.session_state.convo_history.append({"role": "assistant", "content": response['content']})
+    # "image": response["img_b64"]
     st.session_state.last_response = None  # Reset after displaying
 
