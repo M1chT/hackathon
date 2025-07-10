@@ -7,3 +7,6 @@ fastapi
 langchain_tavily
 langchain-community
 langchain_openai
+opencv-python
+numpy<2
+streamlit

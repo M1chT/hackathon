@@ -58,6 +58,30 @@ def on_chat_submit(chat_input):
 def save_feedback(index):
     st.session_state.history[index]["feedback"] = st.session_state[f"feedback_{index}"]
 
+def handle_file_upload(uploaded_file):
+    """Handle file upload and save to uploaded folder"""
+    try:
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            
+            # Create uploaded directory if it doesn't exist
+            import os
+            # Use the hackathon directory as the base path (go up 2 levels from frontend/pages)
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            uploaded_dir = os.path.join(base_dir, "mcp_server", "tools", "uploaded")
+            
+            os.makedirs(uploaded_dir, exist_ok=True)
+            
+            # Save the uploaded file to the uploaded folder
+            file_path = os.path.join(uploaded_dir, uploaded_file.name)
+            image.save(file_path)
+            
+            return True, file_path, image
+        return False, None, None
+    except Exception as e:
+        st.error(f"Error uploading file: {str(e)}")
+        return False, None, None
+
 # ## display image as base64 content to embed using img or CSS tags
 # def img_to_base64(image_path):
 #     """Convert image to base64."""
@@ -167,14 +191,33 @@ if "chat_history" not in st.session_state:
 # Move input bar to bottom
 col1, col2 = st.columns([1, 20], gap="small")
 with col1:
-    file = st.file_uploader("", type=["png", "jpg", "jpeg"], label_visibility="collapsed")
+    files = st.file_uploader("", type=["png", "jpg", "jpeg"], label_visibility="collapsed", accept_multiple_files=True)
 with col2:
     user_input = st.chat_input("Hello! How can I assist you today?")
 
-# Save image if there is one
-if file is not None:
-    image = Image.open(file)
-    ##st.image(image, caption="Uploaded Image", use_column_width=True)
+# Save images if there are any
+if files:
+    uploaded_files = []
+    uploaded_images = []
+    
+    for file in files:
+        success, file_path, image = handle_file_upload(file)
+        
+        if success:
+            uploaded_files.append(file.name)
+            uploaded_images.append((image, file.name))
+    
+    # Show success message for all uploaded files
+    if uploaded_files:
+        if len(uploaded_files) == 1:
+            st.success(f"File '{uploaded_files[0]}' uploaded successfully to uploaded folder!")
+        else:
+            files_list = ", ".join([f"'{name}'" for name in uploaded_files])
+            st.success(f"Files {files_list} uploaded successfully to uploaded folder!")
+        
+        # Display all uploaded images
+        for image, filename in uploaded_images:
+            st.image(image, caption=f"Uploaded: {filename}", use_container_width=True)
 
 if user_input:
     user_input = user_input
