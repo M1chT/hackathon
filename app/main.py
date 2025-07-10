@@ -1,6 +1,7 @@
 from fastapi import FastAPI, APIRouter
 from app.schemas import State
 from app.orchestrator import chatbot_pipeline
+from langgraph.types import Command
 
 app = FastAPI(title="MCP Claim System")
 router = APIRouter()
@@ -8,16 +9,33 @@ router = APIRouter()
 
 @router.post("/")
 async def send_query(input_query: State):
-    config={"configurable":{"thread_id":"user_123"}}
     graph = await chatbot_pipeline()
-    result = await graph.ainvoke(input_query, config=config)
-    print(result)
-    return result
-    # async for state in graph.astream(input_query, stream_mode="values"):
-    #     last_message = state["messages"][-1]
-    # #     last_message.pretty_print()
+    
+    # TO REPLACE: frontend/client to generate and send a session_id (or thread_id)
+    config = {"configurable": {"thread_id": "1"}}
+    
+    state = input_query
+
+    printed_count = 0  # Track how many messages have been shown
+
+    while True:
+        results = await graph.ainvoke(state, config)
+        messages = results.get("messages", [])
+
+        # Print new messages only (including those leading up to interrupt)
+        new_messages = messages[printed_count:]
+        for msg in new_messages:
+            msg.pretty_print()
+        printed_count = len(messages)
+        print("state", state)
         
-    #     return last_message
+        if "__interrupt__" in results:
+            # Handle interrupt, keep printed_count so we don't reprint messages post-resume
+            state = Command(resume=[{"type": "accept"}])  # or "accept" if simulating user confirmation
+            continue
+        else:
+            return messages[-1]
+
 
 
 app.include_router(router, prefix="/send_query")
