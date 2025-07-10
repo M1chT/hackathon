@@ -7,6 +7,8 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from PIL import Image as PILImage
 
+from .qr_code_replacement_helper import replace_qr_in_placeholder_from_b64
+
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
@@ -78,6 +80,9 @@ def generate_infographic(prompt, client, folder="uploaded", previous_response=No
         return response, None
 
     image_base64 = image_data[0]
+
+    image_base64 = replace_qr_in_placeholder_from_b64(image_base64)
+
     with open("infographic.png", "wb") as f:
         f.write(base64.b64decode(image_base64))
 
@@ -112,7 +117,7 @@ def generate_infographics_tool(user_prompt):
     Create a recommended style given from the user prompt infographics image for the internal launch of a digital tool.
 
     Include all images provided in the appropriate positions. If the image is a logo, it should be display it prominently at the top.
-    If a QR code image is provided, include it at the bottom of the infographic with a tag e.g. "Find out more here".
+    If a QR code image is provided, only include an empty placeholder square where you intend to place it, at bottom of the infographic. Do not include the QR code image. There could be an action tag outside the box e.g. "Find out more here".
 
     Use the following information to guide your design, but not all needs to be included if they are repeated or redundant:
     Extract Product Name, Product Description, Unique Selling Point and Tagline from the user prompt .
