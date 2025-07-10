@@ -1,19 +1,19 @@
-from langgraph.graph import StateGraph, START, END
-from app.schemas import State
-
 from langchain.chat_models import init_chat_model
-
-from app.get_tools import get_tools
-
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import ToolMessage
+
+from langgraph.graph import StateGraph, START, END
+from langgraph.checkpoint.memory import InMemorySaver
+
+from app.schemas import State
+from app.get_tools import get_tools
+
 from prompt.gen_prompt import system_prompt
-from langgraph.checkpoint.memory import MemorySaver
 
 from dotenv import load_dotenv
 load_dotenv()
 
-memory = MemorySaver()
+checkpointer = InMemorySaver()
 
 # Define our tool node
 async def call_tool(state: State):
@@ -38,7 +38,7 @@ async def call_tool(state: State):
 async def call_model(state: State):
     # get mcp tools
     tools = await get_tools()
-
+    
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("user", "{input}")]
     )
@@ -76,5 +76,5 @@ async def chatbot_pipeline():
     )
     graph_builder.add_edge("tools", "llm")
 
-    graph = graph_builder.compile(checkpointer=memory)
+    graph = graph_builder.compile(checkpointer=checkpointer)
     return graph

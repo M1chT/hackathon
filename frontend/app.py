@@ -55,5 +55,42 @@ def main():
     pg.run()
 
 
+    # # if not st.session_state.history:
+    # #     initial_bot_message = "Hello! How can I assist you with Streamlit today?"
+    # #     st.session_state.history.append({"role": "assistant", "content": initial_bot_message})
+    # #     st.session_state.conversation_history = initialise_conversation()
+    
+    # # hamburger icon
+    # # st.logo("./images/hamburger.jpg", icon_image="./images/hamburger.jpg")
+
+    # # # Load and display sidebar image
+    # # img_path = "./images/sidebar toolkit.jpg"
+    # # img_base64 = img_to_base64(img_path)
+    # # if img_base64:
+    # #     st.sidebar.markdown(
+    # #         f'<img src="data:image/png;base64,{img_base64}">',
+    # #         unsafe_allow_html=True,
+    # #     )
+    
+    # # st.title("Discover your marketing needs ⭐")
+    # # st.image("./images/marketing.jpg", use_container_width=True)
+
+    # ## sidebar
+    # # sidebar for platform descriptions
+    # st.sidebar.header("⭐ About")
+    # st.sidebar.markdown('''
+    #             ### Product Marketing Studio
+    #             #### Powered by Agents
+
+    #             The platform, PMS assists our Operations Manager (OM) to design a marketing strategy to achieve product's marketing goals through various tools (e.g., competitive analysis, marketing knowledge base, collaterals generator).
+    #             ''')
+    
+    # st.sidebar.markdown("---")
+    # st.sidebar.header("🧰 Resources")
+
+    # # sidebar for pages
+    # mode = st.sidebar.radio(label="Choose one:", options=["Chat with Marketing Guru", "Generate Campaign Collaterals"], index=0)
+    
+
 if __name__ == "__main__":
     main()

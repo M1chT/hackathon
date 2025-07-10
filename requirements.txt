@@ -7,3 +7,5 @@ fastapi
 langchain_tavily
 langchain-community
 langchain_openai
+fastapi
+uvicorn
