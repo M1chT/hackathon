@@ -9,3 +9,5 @@ langchain-community
 langchain_openai
 fastapi
 uvicorn
+opencv-python
+streamlit

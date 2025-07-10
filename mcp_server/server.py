@@ -50,21 +50,6 @@ async def search_web(query: str, num_results: int = 3) -> dict:
 
 
 @mcp.tool()
-def infographics_tool(query: str):
-    """
-    Generate an infographic for the internal launch of a digital tool.
-
-    Args:
-        query (str): The user query containing product name, description, unique selling point, recommended style, and tagline.
-
-    Returns:
-        dict: A dictionary containing the generated infographic details.
-    """
-    response = generate_infographics_tool(query)
-    return response
-
-
-@mcp.tool()
 def telegram_announcement_tool(query: str):
     """Generate a Telegram announcement for a product or event.
 

@@ -1,5 +1,5 @@
 # prompt/gen_prompt.py
-system_prompt = system_prompt = """
+system_prompt = """
 You are a smart and friendly marketing assistant.
 
 A user wants help promoting their product. Your task is to collect or infer the following 4 essential details:
