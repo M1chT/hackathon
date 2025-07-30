@@ -4,6 +4,7 @@ import io
 import time
 from PIL import Image
 
+
 # convert image to base64
 def sidebar_img_to_base64(image_path):
     try:
@@ -13,10 +14,13 @@ def sidebar_img_to_base64(image_path):
         st.sidebar.error("Image not found.")
         return None
 
+
 ####################################################################################
 # Streamlit app UI
 ####################################################################################
-new_chat = st.Page("st_newchat.py", title="New Chat", icon=":material/chat:", default=True)
+new_chat = st.Page(
+    "st_newchat.py", title="New Chat", icon=":material/chat:", default=True
+)
 
 ## hide footer, header, main menu
 hide_st_style = """
@@ -28,11 +32,13 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 ## page layout
-st.set_page_config(page_title="PromoGenie", 
-                   page_icon="📢",
-                   layout='wide', 
-                   initial_sidebar_state='auto',
-                )
+st.set_page_config(
+    page_title="PromoGenie",
+    page_icon="📢",
+    layout="wide",
+    initial_sidebar_state="auto",
+)
+
 
 def main():
     """
@@ -50,21 +56,25 @@ def main():
         )
 
     st.sidebar.header("How to Use")
-    st.sidebar.markdown('''
-            1. Choose your feature (Discuss Marketing Strategy, Produce Marketing Collaterals)
+    st.sidebar.markdown(
+        """
+            1. Tell me about your product
             2. (optional) Upload relevant materials
-            3. Generate responses 
+            3. Generate responses
                         
-            Please note that chat sessions and history are not saved.
-            ''')
+            Please note that chat sessions and history are not saved
+            """
+    )
     st.sidebar.markdown("---")
     st.sidebar.header("About PromoGenie")
-    st.sidebar.markdown('''
-                PromoGenie is an AI-powered tool that helps Operations Managers design targeted marketing strategies using features such as competitive analysis, marketing knowledge base, and collateral generation.
-                ''')
-    
+    st.sidebar.markdown(
+        """
+                PromoGenie is an AI-powered tool that helps Operations Managers design targeted marketing strategies
+                """
+    )
+
     st.sidebar.markdown("---")
-    
+
     ## new chat page
     pg = st.navigation([new_chat])
     pg.run()

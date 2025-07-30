@@ -86,7 +86,7 @@ def generate_infographic(prompt, client, folder="uploaded", previous_response=No
     logger.info(f"Image data: {image_data}")
 
     if not image_data:
-        print("Warning: No image data returned by the image_generation tool.")
+        logger.info("Warning: No image data returned by the image_generation tool.")
         return response, None
 
     image_base64 = image_data[0]
@@ -129,26 +129,30 @@ def generate_infographics_tool(user_prompt: str):
     previous_response = load_previous_response(client)
     # SELECTED_TAGLINE = "Navigate Policies with NAVI – Your Smart MINDEF/SAF Assistant!"
 
+    logger.info(f"user_prompt: {user_prompt}")
+    # prompt_to_use = user_prompt.strip()
+
     infographic_prompt = f"""
         You are a professional communications designer and marketing copywriter for the Ministry of Defence (MINDEF).
 
-        Create a recommended style given from the user prompt infographics image for the internal launch of a digital tool.
+        Create a infographics image from the user prompt for the internal launch of a digital tool.
 
         Include all images provided in the appropriate positions. If the image is a logo, it should be display it prominently at the top.
         If a QR code image is provided, include it at the bottom of the infographic with a tag e.g. "Find out more here".
 
         Use the following information to guide your design, but not all needs to be included if they are repeated or redundant:
-        Extract Product Name, Product Description, Unique Selling Point and Tagline from the user prompt .
+
+        user_prompt: {user_prompt.strip()}
+
+        Extract Product Name, Product Description, Unique Selling Point and Tagline from the user prompt.
 
         Include icons at each section to visually represent the content.
 
         Do not include the words 'Product Name', 'Product Description', 'Unique Selling Point', or 'Tagline' in the design.
         """
-    print(user_prompt)
-    prompt_to_use = user_prompt.strip()
 
     logger.info(f"infographic_prompt: {infographic_prompt}")
-    logger.info(f"prompt_to_use: {user_prompt.strip()}")
+    # logger.info(f"prompt_to_use: {user_prompt.strip()}")
     # prompt_to_use = """Product name: NAVI
     #                 Product description: A productivity chatbot that acts as a digital assistant to help users navigate MINDEF/SAF policies quickly and easily.
     #                 Target audience: All MINDEF and SAF personnel.
@@ -159,7 +163,7 @@ def generate_infographics_tool(user_prompt: str):
     #                 Tagline: "Navigate Policies with NAVI – Your Smart MINDEF/SAF Assistant!"""
     # Generate infographic
     response, generated_infographics = generate_infographic(
-        prompt_to_use,
+        infographic_prompt,
         client,
         folder="uploaded",
         previous_response=previous_response,
